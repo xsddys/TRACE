@@ -1,0 +1,121 @@
+defaults:
+  - base
+
+system:
+  CUDA_VISIBLE_DEVICES: "0,1"
+
+ppo_mini_batch_size: 8
+model_path: ./models/Qwen2.5-3B-Instruct
+experiment_name: jailbreak_eval
+
+
+
+actor_rollout_ref:
+  model:
+    path: ./models/Qwen2.5-3B-Instruct
+    use_remove_padding: True
+  actor:
+    ppo_mini_batch_size: ${ppo_mini_batch_size}
+    use_dynamic_bsz: True
+    ppo_max_token_len_per_gpu: 8000
+    use_kl_loss: False
+    ulysses_sequence_parallel_size: 1
+  rollout:
+    tensor_model_parallel_size: 2
+    max_model_len: 10000
+    response_length: 128
+    gpu_memory_utilization: 0.5
+    max_num_batched_tokens: 10000
+    rollout_filter_ratio: 0.5
+    tp_size_check: False
+    val_kwargs:
+      do_sample: True
+      temperature: 0.5
+      top_p: 0.9
+
+critic:
+  ppo_mini_batch_size: ${ppo_mini_batch_size}
+  model:
+    path: ${model_path}
+
+algorithm:
+  adv_estimator: grpo_heuristic
+  filter_single_turn: False
+  filter_empty_response: False
+  sample_filtering: False
+  similarity_ablation: False
+  harm_ablation: False
+  single_turn_harm_override: False
+  process_adv_lambda: 1.0
+  heuristic_process_adv_lambda: 1.0
+  lambda_harm: 2.0
+
+trainer:
+  project_name: trace_project
+  experiment_name: ${experiment_name}
+  total_training_steps: 288
+  eval_times: 3
+  log_val_generations: 200
+  val_before_train: True
+  val_only: True
+  rollout_data_dir: matric-rollout/Eval/${experiment_name}/train_rollout
+  validation_data_dir: matric-rollout/Eval/${experiment_name}/val_rollout
+  n_gpus_per_node: 2
+  save_best_checkpoint: False
+  test_freq: 20
+  resume_mode: disable
+  logger: [ 'console', 'tensorboard']
+  tensorboard_dir: tensorboard_log
+
+ctx_manager:
+  add_prefix_suffix_prompt: False
+
+agent_proxy:
+  max_actions_per_turn: 1
+  max_turn: 5
+  lm_output_batch: 50
+  parse_response: False
+  enable_think: False
+  reward_normalization:
+    method: "mean_std"
+
+env_llm:
+  model_path: ./models/Meta-Llama-3.1-8B-Instruct
+  tokenizer_path: ./models/Meta-Llama-3.1-8B-Instruct
+  
+  api_model: orm
+  temperature: 0.0
+  max_tokens: 1024
+  GPT_OSS: False
+
+judger_llm:
+  model_path: ./models/HarmBench-Llama-2-13b-cls
+  api_model: orm
+  tokenizer_path: ./models/HarmBench-Llama-2-13b-cls
+  temperature: 0.0
+  max_tokens: 1
+  wanted_token: "Yes"
+  batch_size: 10
+
+es_manager:
+  format_penalty: 0.0
+  train:
+    env_groups: 4
+    group_size: 8
+    env_configs:
+      tags: ["Jailbreak"]
+      n_groups: [4]
+  val:
+    env_groups: 420
+    group_size: 3
+    env_configs:
+      tags: ["Jailbreak"]
+      n_groups: [420]
+    use_test_data_paths: True
+    auto_full_eval: True
+
+
+reward_model:
+  reward_normalization:
+    grouping: "state"
+    method: "mean_std" # asym_clip / identity / mean_std

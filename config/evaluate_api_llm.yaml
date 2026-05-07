@@ -1,0 +1,56 @@
+defaults:
+  - base # this is a symbolic link to the verl/verl/trainer/config/ppo_trainer.yaml file
+
+model_config:
+  model_name: gpt-4o # should be registered in model_info
+  max_concurrency: 16
+
+model_info:
+  Qwen2.5-7B-Instruct:
+    provider_name: together
+    model_name: Qwen/Qwen2.5-7B-Instruct-Turbo
+    generation_kwargs:
+      temperature: 0
+      max_tokens: 512
+  Qwen2.5-72B-Instruct:
+    provider_name: together
+    model_name: Qwen/Qwen2.5-72B-Instruct-Turbo
+    generation_kwargs:
+      temperature: 0
+      max_tokens: 512
+  claude-3.7:
+    provider_name: anthropic
+    model_name: claude-3-7-sonnet-20250219
+    generation_kwargs:
+      temperature: 0
+      max_tokens: 512 # max_completion_tokens if o1-mini
+  gpt-4o:
+    provider_name: openai
+    model_name: gpt-4o
+    generation_kwargs:
+      temperature: 0
+      max_tokens: 512 # max_completion_tokens if o1-mini
+  deepseek-r1:
+    provider_name: deepseek
+    model_name: deepseek-reasoner
+    generation_kwargs:
+      temperature: 0
+      max_completion_tokens: 512
+  deepseek-v3:
+    provider_name: deepseek
+    model_name: deepseek-chat
+    generation_kwargs:
+      temperature: 0
+      max_completion_tokens: 512
+
+
+
+es_manager:
+  val:
+    env_groups: 256
+    group_size: 1 # should be set to 1 because val temperature is set to 0 and same prompt leads to same output
+    env_configs:
+      tags: ["SimpleSokoban"]
+      n_groups: [256] # If not set, all env names divide nums equally. Under the same group, the env config and env seed (prompt) are equal in each generation
+
+

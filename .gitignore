@@ -1,0 +1,8 @@
+/checkpoints
+/run_logs
+/data/strongreject
+/nohup_logs
+/tensorboard_log
+/outputs
+/ragen/temp
+/matric-rollout

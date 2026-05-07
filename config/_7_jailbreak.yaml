@@ -1,0 +1,149 @@
+defaults:
+  - base
+
+system:
+  CUDA_VISIBLE_DEVICES: "0,1"
+
+ppo_mini_batch_size: 8
+model_path: ./models/Qwen2.5-3B-Instruct
+experiment_name: jailbreak_experiment
+
+
+
+actor_rollout_ref:
+  model:
+    path: ./models/Qwen2.5-3B-Instruct
+    use_remove_padding: True
+  actor:
+    ppo_mini_batch_size: ${ppo_mini_batch_size}
+    use_dynamic_bsz: True
+    ppo_max_token_len_per_gpu: 10000
+    use_kl_loss: False
+    ulysses_sequence_parallel_size: 1
+  rollout:
+    tensor_model_parallel_size: 2
+    max_model_len: 10000
+    response_length: 128
+    gpu_memory_utilization: 0.5
+    max_num_batched_tokens: 10000
+    rollout_filter_ratio: 0.5
+    tp_size_check: False
+    val_kwargs:
+      do_sample: True
+      temperature: 0.5
+      top_p: 0.9
+
+critic:
+  ppo_mini_batch_size: ${ppo_mini_batch_size}
+  model:
+    path: ${model_path}
+
+algorithm:
+  adv_estimator: grpo_failure
+  filter_single_turn: False
+  filter_empty_response: False
+  sample_filtering: False
+  similarity_ablation: True
+  harm_ablation: True
+  refulsal_ablation: True
+  add_refusal_reward_to_success_trajectories: True
+  single_turn_harm_override: False
+  process_adv_lambda: 1.0
+  heuristic_process_adv_lambda: 0.1
+  refusal_process_adv_lambda: 0.04
+  lambda_harm: 2.0
+  semantic:
+    mask_strategy: omit
+    mask_text: "[MASK]"
+    omit_text: "A round of dialogue is omitted here."
+    neutral_text: "Let's talk about something else for a moment."
+    harmful_threshold: 0.9
+    lambda: 0.4
+    tau: 1.0
+    z_max: 3.0
+    eps: 1e-6
+  failure:
+    harmful_threshold: 0.9
+    lambda: 0.4
+    beta: 1.0
+    eps: 1e-6
+    attacker_format: ${agent_proxy.attacker_format}
+    max_phase: 5
+    phase_profile: qwen
+    minilm_model_path: ./models/all-MiniLM-L6-v2
+    qwen_guard_base_url: 
+    qwen_guard_api_model: name
+    qwen_guard_api_key: 
+    qwen_guard_temperature: 0.0
+
+trainer:
+  project_name: trace_project
+  experiment_name: ${experiment_name}
+  total_training_steps: 130
+  log_val_generations: 200
+  val_before_train: True
+  rollout_data_dir: matric-rollout/Training/${experiment_name}/train_rollout
+  validation_data_dir: matric-rollout/Training/${experiment_name}/val_rollout
+  n_gpus_per_node: 2
+  save_best_checkpoint: False
+  save_freq: 0
+  save_steps: [80,90,100,110,120,130]
+  test_freq: 10
+  resume_mode: disable
+  logger: [ 'console', 'wandb']
+  tensorboard_dir: tensorboard_log/${experiment_name}
+
+ctx_manager:
+  add_prefix_suffix_prompt: False
+
+agent_proxy:
+  max_actions_per_turn: 1
+  max_turn: 5
+  lm_output_batch: 50
+  parse_response: False
+  enable_think: False
+  attacker_format: legacy_think_answer
+  qwen3_enable_thinking: False
+  reward_normalization:
+    method: "mean_std"
+
+env_llm:
+  mode: single
+  model_path: ./models/Qwen2.5-7B-Instruct
+  tokenizer_path: ./models/Qwen2.5-7B-Instruct
+  api_model: orm
+  temperature: 0.0
+  max_tokens: 1024
+  GPT_OSS: False
+
+
+judger_llm:
+  model_path: ./models/HarmBench-Llama-2-13b-cls
+  api_model: orm
+  tokenizer_path: ./models/HarmBench-Llama-2-13b-cls
+  temperature: 0.0
+  max_tokens: 1
+  wanted_token: "Yes"
+  batch_size: 10
+
+es_manager:
+  format_penalty: 0.0
+  train:
+    env_groups: 4
+    group_size: 8
+    env_configs:
+      tags: ["Jailbreak"]
+      n_groups: [4]
+  val:
+    env_groups: 100
+    group_size: 1
+    env_configs:
+      tags: ["Jailbreak"]
+      n_groups: [100]
+    auto_full_eval: True
+
+
+reward_model:
+  reward_normalization:
+    grouping: "state"
+    method: "mean_std" # asym_clip / identity / mean_std
