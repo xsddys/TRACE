@@ -14,6 +14,8 @@ TRACE is a training and evaluation codebase for multi-turn jailbreak optimizatio
 Use a Python environment with the dependencies in `requirements.txt`:
 
 ```bash
+conda create -n trace python=3.10
+conda activate trace
 pip install -r requirements.txt
 ```
 
@@ -23,15 +25,14 @@ The training configs assume GPU execution. `run.sh` provides a minimal launch ex
 
 Before starting training or evaluation, fill in the required model paths and API fields in the corresponding YAML file.
 
-### 1. Base attacker
+### 1. attacker
 
 The attacker model is defined by:
 
 - `model_path`
 - `actor_rollout_ref.model.path`
-- `critic.model.path` follows `model_path`
 
-These fields should point to the base attacker checkpoint used for optimization.
+These fields should point to the base attacker checkpoint used for optimization, i.e. ./models/Qwen2.5-3B-Instruct.
 
 ### 2. `env_llm` (target model)
 
@@ -81,7 +82,7 @@ The main training mode is controlled by `algorithm.adv_estimator`.
 
 - `grpo`: GRPO training with outcome signal only
 - `grpo_semantic`: uses success-side leave-one-turn-out masking for turn-aware credit assignment
-- `grpo_failure`: uses the full success-side and failure-side credit assignment
+- `grpo_failure`: uses the full success-side and failure-side turn-aware credit assignment
 
 ## Refusal-Aware Penalty
 
@@ -123,43 +124,6 @@ python train.py --config-name _7_jailbreak_eval.yaml
 ```
 
 This configuration runs evaluation-only detection / assessment.
-
-## Example Launch Pattern
-
-The example script `run.sh` shows a standard single-target launch pattern. A typical manual launch looks like:
-
-```bash
-python train.py --config-name _7_jailbreak.yaml \
-  model_path=./models/<attacker-model> \
-  experiment_name=<experiment-name> \
-  trainer.project_name=<project-name> \
-  trainer.experiment_name=<experiment-name>
-```
-
-In practice, the most commonly overridden fields are:
-
-- attacker model path
-- target model fields under `env_llm`
-- judge model fields under `judger_llm`
-- `algorithm.adv_estimator`
-- `algorithm.refulsal_ablation`
-- training step / save / validation frequency
-
-## Outputs
-
-Training and evaluation artifacts are written to config-defined output directories, including:
-
-- checkpoints
-- rollout logs
-- tensorboard logs
-- console / wandb logs when enabled
-
-The exact output locations are controlled by:
-
-- `trainer.default_local_dir`
-- `trainer.rollout_data_dir`
-- `trainer.validation_data_dir`
-- `trainer.tensorboard_dir`
 
 ## Notes
 
