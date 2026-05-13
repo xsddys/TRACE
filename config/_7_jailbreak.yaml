@@ -111,6 +111,7 @@ env_llm:
   mode: single
   model_path: ./models/Qwen2.5-7B-Instruct
   tokenizer_path: ./models/Qwen2.5-7B-Instruct
+  base_url:
   api_model: orm
   temperature: 0.0
   max_tokens: 1024
@@ -119,6 +120,7 @@ env_llm:
 
 judger_llm:
   model_path: ./models/HarmBench-Llama-2-13b-cls
+  base_url:
   api_model: orm
   tokenizer_path: ./models/HarmBench-Llama-2-13b-cls
   temperature: 0.0

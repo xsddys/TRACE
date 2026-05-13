@@ -49,7 +49,7 @@ def parse_qwenguard_refusal(text: str) -> Optional[bool]:
 @dataclass
 class QwenGuardConfig:
     base_url: str
-    api_model: str = "orm"
+    api_model: str = ""
     api_key: str = ""
     temperature: float = 0.0
     top_p: float = 1.0

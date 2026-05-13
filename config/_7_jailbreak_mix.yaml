@@ -45,7 +45,7 @@ algorithm:
   sample_filtering: False
   similarity_ablation: True
   harm_ablation: True
-  refulsal_ablation: True
+  refulsal_ablation: False
   add_refusal_reward_to_success_trajectories: True
   single_turn_harm_override: False
   process_adv_lambda: 1.0
@@ -119,28 +119,32 @@ env_llm:
     qwen:
       model_path: ./models/Qwen2.5-7B-Instruct
       tokenizer_path: ./models/Qwen2.5-7B-Instruct
-      api_model: orm
+      base_url: 
+      api_model: 
       temperature: 0.0
       max_tokens: 1024
       GPT_OSS: False
     oss:
       model_path: ./models/GPT-OSS-20B
       tokenizer_path: ./models/GPT-OSS-20B
-      api_model: orm
+      base_url: 
+      api_model: 
       temperature: 0.0
       max_tokens: 1024
       GPT_OSS: True
     llama:
       model_path: ./models/Meta-Llama-3.1-8B-Instruct
       tokenizer_path: ./models/Meta-Llama-3.1-8B-Instruct
-      api_model: orm
+      base_url:
+      api_model: 
       temperature: 0.0
       max_tokens: 1024
       GPT_OSS: False
     gemma:
       model_path: ./models/gemma-3-27b-it
       tokenizer_path: ./models/gemma-3-27b-it
-      api_model: orm
+      base_url:
+      api_model: 
       temperature: 0.0
       max_tokens: 1024
       GPT_OSS: False
@@ -148,6 +152,7 @@ env_llm:
 
 judger_llm:
   model_path: ./models/HarmBench-Llama-2-13b-cls
+  base_url: 
   api_model: orm
   tokenizer_path: ./models/HarmBench-Llama-2-13b-cls
   temperature: 0.0
