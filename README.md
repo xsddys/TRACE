@@ -2,9 +2,14 @@
   <img src="assets/TRACE_logo.png" alt="TRACE" height="140">
 </p>
 
-<p align="center" style="font-size: 48px; margin-top: 0;">
-  Not All Turns Matter: Credit Assignment for Multi-Turn Jailbreaking
+<p align="center" style="margin: 6px 0 0;">
+  <span style="font-size: 18px; font-weight: 700; letter-spacing: 0.28em;">TRACE</span>
 </p>
+
+<h1 align="center" style="font-size: 52px; margin: 8px 0 0; line-height: 1.08;">
+  <strong>Not All Turns Matter</strong><br>
+  <span style="font-size: 34px; font-weight: 600;">Credit Assignment for Multi-Turn Jailbreaking</span>
+</h1>
 
 
 <p align="center">
