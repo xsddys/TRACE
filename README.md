@@ -1,8 +1,8 @@
 <p align="center" style="margin-bottom: 0px;">
-  <img src="assets/trace_logo.png" alt="MAGIC" height="140">
+  <img src="assets/TRACE_logo.png" alt="TRACE" height="140">
 </p>
 
-<p align="center" style="font-size: 24px; margin-top: 0;">
+<p align="center" style="font-size: 48px; margin-top: 0;">
   Not All Turns Matter: Credit Assignment for Multi-Turn Jailbreaking
 </p>
 
@@ -12,12 +12,13 @@
   <a href="https://docs.vllm.ai/en/v0.8.2/"><img src="https://img.shields.io/badge/vLLM-0.8.2-5C2D91?style=flat-square" alt="vLLM0.8.2"></a>
 </p>
 
-# Overview
+# 🔍 Overview
 <p align="center">
   <img src="./assets/TRACE_intro.png" alt="TRACE overview" width="800">
 </p>
 
-TRACE (TuRn-level Assignment for CrEdit) is a framework for turn-aware credit assignment in RL-based multi-turn jailbreaking. It makes four main contributions:
+**TRACE** (**T**u**R**n-level **A**ssignment for **C**r**E**dit) is a framework for turn-aware credit assignment in RL-based multi-turn jailbreaking. 
+✨ It makes four main contributions:
 
 - Characterize turn-level contributions
   - Identify non-uniform turn contribution in multi-turn jailbreaks.
@@ -35,26 +36,26 @@ TRACE (TuRn-level Assignment for CrEdit) is a framework for turn-aware credit as
 
 We build our training pipeline on [TROJail](https://github.com/xxiqiao/TROJail) and [RAGEN](https://github.com/mll-lab-nu/RAGEN).
 
-# Methods
+# 🧠 Methods
 <p align="center">
   <img src="./assets/TRACE_methods.png" alt="TRACE methods" width="800">
 </p>
 
-### Training Variants
+### ⚙️ Training Variants
 
 - `TRACE(single)`: train against and evaluate on the same target within one model family. See `config/_7_jailbreak.yaml`.
 - `TRACE(mix)`: jointly train against two fixed targets (`gpt-oss-20b` and `Llama3.1-8B-IT`). See `config/_7_jailbreak_mix.yaml`.
 
-### Refusal-Aware Local Process Penalty
+### 🛡️ Refusal-Aware Local Process Penalty
 
 The optional refusal-aware local process penalty is controlled by `algorithm.refulsal_ablation`.
 
 - For `TRACE(single)`, keep it `True` when transferability within the same target family matters. If you only train and evaluate on one fixed target, set it to `False`.
 - For `TRACE(mix)`, set it to `False` to keep the penalty active.
 
-# Training
+# 🚀 Training
 
-### Environment Setup
+### 🧱 Environment Setup
 
 Use a Python environment with the dependencies in `requirements.txt`:
 
@@ -64,7 +65,7 @@ conda activate trace
 pip install -r requirements.txt
 ```
 
-### Choose a Training Config
+### 🗂️ Choose a Training Config
 
 Use one of the following configs:
 
@@ -73,7 +74,7 @@ Use one of the following configs:
 
 Before training or evaluation, fill in the required model paths and API fields in the selected YAML file.
 
-### Required Configuration
+### 📝 Required Configuration
 
 #### 1. `attacker`
 
@@ -107,7 +108,7 @@ When `algorithm.adv_estimator=grpo_failure`, you must additionally fill in `algo
 
 `algorithm.failure.minilm_model_path` should point to the local checkpoint of `all-MiniLM-L6-v2`, or an equivalent MiniLM-L6-v2 path. `algorithm.failure.qwen_guard_base_url` shoule point to Qwen3Guard.
 
-### Run Training
+### ▶️ Run Training
 
 After the required paths and API fields are ready, run one of the following commands:
 
@@ -118,7 +119,7 @@ python train.py --config-name _7_jailbreak_mix.yaml
 
 The training configs assume GPU execution. `run.sh` provides a minimal launch example for single-target training.
 
-# Evaluation
+# 📊 Evaluation
 
 Use:
 
@@ -128,7 +129,7 @@ python train.py --config-name _7_jailbreak_eval.yaml
 
 This configuration runs evaluation only. Before launching it, fill in the required target model paths and API fields in `_7_jailbreak_eval.yaml`.
 
-# Citation
+# 📖 Citation
 
 ```bibtex
 @misc{he2026turnsmattercreditassignment,
