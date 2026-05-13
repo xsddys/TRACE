@@ -45,7 +45,7 @@ algorithm:
   sample_filtering: False
   similarity_ablation: True
   harm_ablation: True
-  refulsal_ablation: True
+  refulsal_ablation: False
   add_refusal_reward_to_success_trajectories: True
   single_turn_harm_override: False
   process_adv_lambda: 1.0
