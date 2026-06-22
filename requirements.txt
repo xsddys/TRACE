@@ -44,7 +44,8 @@ fastapi-cloud-cli==0.11.0
 fastar==0.8.0
 fastrlock==0.8.3
 filelock==3.24.3
-flash_attn==2.7.4.post1
+# Install flash_attn manually from the matching wheel after installing torch.
+# flash_attn==2.7.4.post1
 fonttools==4.61.1
 frozenlist==1.8.0
 fsspec==2025.3.0

@@ -62,9 +62,11 @@ The optional refusal-aware local process penalty is controlled by `algorithm.ref
 Use a Python environment with the dependencies in `requirements.txt`:
 
 ```bash
-conda create -n trace python=3.10
+conda create -n trace python=3.12
 conda activate trace
-pip install -r requirements.txt
+pip install --no-cache-dir torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0
+pip install https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp312-cp312-linux_x86_64.whl
+pip install --no-cache-dir -r requirements.txt
 ```
 
 ### 🗂️ Choose a Training Config
