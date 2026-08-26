@@ -8,6 +8,9 @@
   <span style="font-size: 34px; font-weight: 600;">Credit Assignment for Multi-Turn Jailbreaking</span>
 </h1>
 
+<p align="center">
+  <strong>🤗 Open Model: <a href="https://huggingface.co/XiaoyuWen/TRACE-Mix-Qwen2.5-3B-Instruct">TRACE-Mix-Qwen2.5-3B-Instruct</a></strong>
+</p>
 
 <p align="center">
   <a href="assets/TRACE_arxiv.pdf"><img src="https://img.shields.io/badge/Paper-PDF-red" alt="Paper"></a>
@@ -20,6 +23,9 @@
 </p>
 
 **TRACE** (**T**u**R**n-level **A**ssignment for **C**r**E**dit) is a framework for turn-aware credit assignment in RL-based multi-turn jailbreaking. 
+
+We have open-sourced our trained `TRACE(mix)` model, [TRACE-Mix-Qwen2.5-3B-Instruct](https://huggingface.co/XiaoyuWen/TRACE-Mix-Qwen2.5-3B-Instruct), on Hugging Face for direct access and use.
+
 ✨ It makes four main contributions:
 
 - Characterize turn-level contributions
