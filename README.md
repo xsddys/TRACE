@@ -15,6 +15,7 @@
 <p align="center">
   <a href="assets/TRACE_arxiv.pdf"><img src="https://img.shields.io/badge/Paper-PDF-red" alt="Paper"></a>
   <a href="https://docs.vllm.ai/en/v0.8.2/"><img src="https://img.shields.io/badge/vLLM-0.8.2-5C2D91?style=flat-square" alt="vLLM0.8.2"></a>
+  <a href="https://huggingface.co/XiaoyuWen/TRACE-Mix-Qwen2.5-3B-Instruct"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-FFD21E?style=flat-square" alt="Hugging Face Model"></a>
 </p>
 
 # 🔍 Overview
